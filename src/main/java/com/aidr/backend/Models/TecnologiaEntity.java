@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.util.Date;
 
 @Entity
 @NoArgsConstructor
@@ -16,10 +17,20 @@ public class TecnologiaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idTecnologia;
+    private int idTecnologia;
 
     private String nombre;
 
-    private boolean estatus;
+    private int estatus;
+
+    @Column(nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date fechaCreacion;
+
+    @Temporal(TemporalType.DATE)
+    private Date fechaModificacion;
+
+    @Temporal(TemporalType.DATE)
+    private Date fechaBaja;
 
 }
