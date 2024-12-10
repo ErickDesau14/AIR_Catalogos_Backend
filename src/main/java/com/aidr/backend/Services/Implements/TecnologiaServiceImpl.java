@@ -6,7 +6,6 @@ import com.aidr.backend.Repositories.ITecnologiaRepository;
 import com.aidr.backend.Services.Interfaces.ITecnologiaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,7 +31,7 @@ public class TecnologiaServiceImpl implements ITecnologiaService {
     }
 
     @Override
-    public TecnologiaDTO findTecnologiaById(Long id) {
+    public TecnologiaDTO findTecnologiaById(int id) {
         TecnologiaEntity tecnologia = tecnologiaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Tecnología no encontrada"));
 
@@ -48,8 +47,15 @@ public class TecnologiaServiceImpl implements ITecnologiaService {
 
     @Override
     public TecnologiaDTO saveTecnologia(TecnologiaDTO tecnologiaDTO) {
+
+        String nombreNormalizado = tecnologiaDTO.getNombre().trim().replaceAll("\\s+", " ").toLowerCase();
+
+        if(tecnologiaRepository.existsByNombreIgnoreCase(nombreNormalizado)) {
+            throw new RuntimeException("Ya existe una tecnología con ese nombre");
+        }
+
         TecnologiaEntity tecnologia = new TecnologiaEntity();
-        tecnologia.setNombre(tecnologiaDTO.getNombre());
+        tecnologia.setNombre(tecnologiaDTO.getNombre().trim());
         tecnologia.setEstatus(1);
         tecnologia.setFechaCreacion(new Date());
 
@@ -64,12 +70,20 @@ public class TecnologiaServiceImpl implements ITecnologiaService {
     }
 
     @Override
-    public TecnologiaDTO updateTecnologia(Long id, TecnologiaDTO tecnologiaDTO) {
+    public TecnologiaDTO updateTecnologia(int id, TecnologiaDTO tecnologiaDTO) {
         TecnologiaEntity tecnologia = tecnologiaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Tecnología no encontrada"));
 
-        tecnologia.setNombre(tecnologiaDTO.getNombre());
-        tecnologia.setEstatus(tecnologiaDTO.getEstatus());
+        String nombreNormalizado = tecnologiaDTO.getNombre().trim().replaceAll("\\s+", " ").toLowerCase();
+
+        boolean existeTecnologia = tecnologiaRepository.findAll().stream()
+                .anyMatch(t -> t.getIdTecnologia() != id && t.getNombre().trim().replaceAll("\\s+", " ").toLowerCase().equals(nombreNormalizado));
+
+        if(existeTecnologia) {
+            throw new RuntimeException("Ya existe una tecnología con ese nombre");
+        }
+
+        tecnologia.setNombre(tecnologiaDTO.getNombre().trim());
         tecnologia.setFechaModificacion(new Date());
 
         tecnologia = tecnologiaRepository.save(tecnologia);
@@ -85,13 +99,26 @@ public class TecnologiaServiceImpl implements ITecnologiaService {
     }
 
     @Override
-    public void deleteTecnologia(Long id) {
+    public TecnologiaDTO updateEstatusTecnologia(int id, int estatus) {
         TecnologiaEntity tecnologia = tecnologiaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Tecnología no encontrada"));
 
-        tecnologia.setEstatus(0);
-        tecnologia.setFechaBaja(new Date());
+        if (estatus == 0) {
+            tecnologia.setFechaBaja(new Date());
+        } else {
+            tecnologia.setFechaBaja(null);
+        }
 
-        tecnologiaRepository.save(tecnologia);
+        tecnologia.setEstatus(estatus);
+        tecnologia = tecnologiaRepository.save(tecnologia);
+
+        return TecnologiaDTO.builder()
+                .idTecnologia(tecnologia.getIdTecnologia())
+                .nombre(tecnologia.getNombre())
+                .estatus(tecnologia.getEstatus())
+                .fechaCreacion(tecnologia.getFechaCreacion())
+                .fechaModificacion(tecnologia.getFechaModificacion())
+                .fechaBaja(tecnologia.getFechaBaja())
+                .build();
     }
 }
