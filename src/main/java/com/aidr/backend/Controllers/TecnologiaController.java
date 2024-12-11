@@ -1,7 +1,6 @@
 package com.aidr.backend.Controllers;
 
 import com.aidr.backend.DTOs.TecnologiaDTO;
-import com.aidr.backend.Models.TecnologiaEntity;
 import com.aidr.backend.Services.Implements.TecnologiaServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
