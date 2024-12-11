@@ -6,20 +6,32 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Table(name = "puestos")
-public class Cat_PuestoEntity {
+public class CatPuestoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idPuesto;
+    private int idPuesto;
 
-    private String puesto;
+    private String nombre;
 
-    private boolean estatus;
+    private int estatus;
+
+    @Column(nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date fechaCreacion;
+
+    @Temporal(TemporalType.DATE)
+    private Date fechaModificacion;
+
+    @Temporal(TemporalType.DATE)
+    private Date fechaBaja;
 
 }
