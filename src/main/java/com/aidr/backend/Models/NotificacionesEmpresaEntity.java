@@ -15,7 +15,7 @@ public class NotificacionesEmpresaEntity {
 
   @ManyToOne
   @JoinColumn(name = "idTipoDeNotificacion", referencedColumnName = "idTipoNotificacion")
-  private CatTiposnotificacionesEntity tipoNotificacion;
+  private CatTiposNotificacionesEntity tipoNotificacion;
 
   @ManyToOne
   @JoinColumn(name = "idEmpresa", referencedColumnName = "idEmpresa")
