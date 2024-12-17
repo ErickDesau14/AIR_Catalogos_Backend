@@ -22,7 +22,7 @@ public class CatNotificacionesEntity {
 
   @ManyToOne
   @JoinColumn(name = "idTipoDeNotificacion", referencedColumnName = "idTipoNotificacion")
-  private CatTiposnotificacionesEntity tipoNotificacion;
+  private CatTiposNotificacionesEntity tipoNotificacion;
 
   private String texto;
 
