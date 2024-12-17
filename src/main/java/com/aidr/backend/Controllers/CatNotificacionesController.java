@@ -16,7 +16,7 @@ import java.util.Map;
 public class CatNotificacionesController {
 
   @Autowired
-  CatNotificacionesServiceImpl catNotificacionesServiceImpl;
+  private CatNotificacionesServiceImpl catNotificacionesServiceImpl;
 
   @GetMapping("/notificacion")
   public List<CatNotificacionDTO> findNotificaciones() {
