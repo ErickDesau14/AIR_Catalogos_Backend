@@ -103,7 +103,7 @@ public class CatNotificacionesServiceImpl implements ICatNotificacionesService {
   @Override
   public CatNotificacionDTO updateEstatusNotificacion(int id, int estatus) {
     CatNotificacionesEntity notificacion = catNotificacionesRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Puesto no encontrado"));
+            .orElseThrow(() -> new RuntimeException("Notificacion no encontrada"));
 
     if (estatus == 0) {
       notificacion.setFechaBaja(new Date());
